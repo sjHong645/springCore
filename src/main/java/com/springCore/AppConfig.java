@@ -1,5 +1,6 @@
 package com.springCore;
 
+import com.springCore.discount.DiscountPolicy;
 import com.springCore.discount.FixDiscountPolicy;
 import com.springCore.member.MemberService;
 import com.springCore.member.MemberServiceImpl;
@@ -9,16 +10,27 @@ import com.springCore.order.OrderServiceImpl;
 
 public class AppConfig {
 
-    // 각각의 클래스에 구현체를 주입하기 위해서
-    // 아래와 같은 코드를 작성함
+    // 전체적인 역할이 한 눈에 보이도록 리팩토링한다.
 
-    // memberRepository 인터페이스의 구현체 MemoryMemberRepository()를 주입
-    // Discount 인터페이스의 구현체 FixDiscountPolicy()를 주입
+    // memberRepository를 위해서 MemoryMemberRepository를 쓸 것이다
+
+    // 이렇게 각 메소드의 "역할"이 드러나고
+    // "역할들의 구현체"가 한 눈에 들어오도록 리팩토링 했다.
+    private MemoryMemberRepository memberRepository() {
+        return new MemoryMemberRepository();
+    }
+
     public MemberService memberService() {
-        return new MemberServiceImpl(new MemoryMemberRepository());
+        return new MemberServiceImpl(memberRepository());
+    }
+
+    public DiscountPolicy discountPolicy() {
+        return new FixDiscountPolicy();
     }
 
     public OrderService orderService() {
-        return new OrderServiceImpl(new MemoryMemberRepository(), new FixDiscountPolicy());
+        return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
+
+
 }
