@@ -7,28 +7,34 @@ import com.springCore.member.MemberServiceImpl;
 import com.springCore.order.Order;
 import com.springCore.order.OrderService;
 import com.springCore.order.OrderServiceImpl;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class OrderApp {
 
     public static void main(String[] args) {
-        // MemberService memberService = new MemberServiceImpl();
-        // OrderService orderService = new OrderServiceImpl();
-        AppConfig appConfig = new AppConfig();
 
-        // appConfig의 메소드 memberService를 통해서...
-        // new MemberServiceImpl(new MemoryMemberRepository())가 return 되도록 함
+        /*
+        Creating shared instance of singleton bean 'appConfig'
+        Creating shared instance of singleton bean 'memberRepository'
+        Creating shared instance of singleton bean 'memberService'
+        Creating shared instance of singleton bean 'discountPolicy'
+        Creating shared instance of singleton bean 'orderService'
 
-        // MemoryMemberRepository를 MemberServiceImpl에 주입한 상태에서
-        // MemberServiceImple의 기능을 사용할 수 있게 되었다
+        main 메소드를 실행하면 나타나는 로그 기록
+        ==> AppConfig 에서 설정한 메소드들을 빈으로 만들어서 저장한 걸 알 수 있다.
+         */
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        // orderService를 통해서...
-        // new OrderServiceImpl(new MemoryMemberRepository(), new FixDiscountPolicy())를 return함
+        // 컨테이너에 있는 것들 중에서
+        // 이름이 memberService인 객체를 찾는다. 반환 타입은 MemberService 타입
+        // 기본적으로 이름은 메소드의 이름으로 저장된다.
+        // orderService도 마찬가지.
+        MemberService memberService = applicationContext.getBean("memberService", MemberService.class);
+        OrderService orderService = applicationContext.getBean("orderService", OrderService.class);
 
-        // MemoryMemberRepository, FixDiscountPolicy를 OrderServiceImple에 주입한 상태에서
-        // OrderServiceImple의 기능을 사용할 수 있게 되었다.
-
-        MemberService memberService = appConfig.memberService();
-        OrderService orderService = appConfig.orderService();
+        // MemberService memberService = appConfig.memberService();
+        // OrderService orderService = appConfig.orderService();
 
         // member를 만들고 회원가입까지 완료했음
         Long memberId = 1L;

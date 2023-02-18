@@ -4,21 +4,34 @@ import com.springCore.member.Grade;
 import com.springCore.member.Member;
 import com.springCore.member.MemberService;
 import com.springCore.member.MemberServiceImpl;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class MemberApp {
 
     public static void main(String[] args) {
-        AppConfig appConfig = new AppConfig();
+        // AppConfig appConfig = new AppConfig();
+        // MemberService memberService = appConfig.memberService();
 
-        // MemberService memberService = new MemberServiceImpl();
+        // AppConfig에 있는 환경설정 정보를 가지고
+        // Spring이 각각의 정보들을 Bean 컨테이너에 저장해서 관리
 
-        // appConfig의 메소드 memberService를 통해서...
-        // new MemberServiceImpl(new MemoryMemberRepository())가 return 되도록 함
+        /*
+        Creating shared instance of singleton bean 'appConfig'
+        Creating shared instance of singleton bean 'memberRepository'
+        Creating shared instance of singleton bean 'memberService'
+        Creating shared instance of singleton bean 'discountPolicy'
+        Creating shared instance of singleton bean 'orderService'
 
-        // MemoryMemberRepository를 MemberServiceImpl에 주입한 상태에서
-        // MemberServiceImple의 기능을 사용할 수 있게 되었다
+        main 메소드를 실행하면 나타나는 로그 기록
+        ==> AppConfig 에서 설정한 메소드들을 빈으로 만들어서 저장한 걸 알 수 있다.
+         */
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        MemberService memberService = appConfig.memberService();
+        // 컨테이너에 있는 것들 중에서
+        // 이름이 memberService인 객체를 찾는다. 반환 타입은 MemberService 타입
+        // 기본적으로 이름은 메소드의 이름으로 저장된다.
+        MemberService memberService = applicationContext.getBean("memberService", MemberService.class);
 
         Member member = new Member(1L, "memberA", Grade.VIP);
 
