@@ -33,4 +33,21 @@ public class ConfigurationSingletonTest {
         System.out.println("memberRepository = " + memberRepository);
 
     }
+
+    @Test
+    void configurationDeep() {
+        ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        // AppConfig를 조회해보자.
+        AppConfig bean = ac.getBean(AppConfig.class);
+
+        System.out.println("bean = " + bean.getClass());
+
+        // bean = class com.springCore.AppConfig$$EnhancerBySpringCGLIB$$66d6e43b
+        // 위와 같이 출력되었음
+        // com.springCore.AppConfig 뒤에 EnhancerBySpringCGLIB라는 것도 출력되었음
+
+
+
+    }
 }
