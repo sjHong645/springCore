@@ -5,6 +5,9 @@ import com.springCore.member.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.engine.support.hierarchical.SingleTestExecutor;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SingletonTest {
 
@@ -23,7 +26,25 @@ public class SingletonTest {
         System.out.println("memberService2 = " + memberService2);
 
         // memberService와 memberService2가 서로 다른지 확인
-        Assertions.assertThat(memberService).isNotSameAs(memberService2);
+        assertThat(memberService).isNotSameAs(memberService2);
     }
 
+
+    @Test
+    @DisplayName("싱글톤 패턴을 적용한 객체 사용")
+    void singletonServiceTest() {
+
+        SingletonService instance = SingletonService.getInstance();
+        SingletonService instance2 = SingletonService.getInstance();
+
+        // SingletonService로 부터 얻은
+        // 2개의 객체가
+
+        // 정말 같은 주소에 저장되어 있는지 확인
+        assertThat(instance).isSameAs(instance2);
+
+        // same
+        // equal
+
+    }
 }
