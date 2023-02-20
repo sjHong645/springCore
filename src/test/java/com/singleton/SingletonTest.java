@@ -6,6 +6,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.engine.support.hierarchical.SingleTestExecutor;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,7 +23,7 @@ public class SingletonTest {
         MemberService memberService2 = appConfig.memberService();
 
         // 두 인스턴스의 참조값이 다른지 확인
-        System.out.println("memberService = " + memberService2);
+        System.out.println("memberService = " + memberService);
         System.out.println("memberService2 = " + memberService2);
 
         // memberService와 memberService2가 서로 다른지 확인
@@ -45,6 +46,28 @@ public class SingletonTest {
 
         // same
         // equal
+
+    }
+
+    @Test
+    @DisplayName("스프링 컨테이너와 싱글톤")
+    void springContainer() {
+
+        // AppConfig appConfig = new AppConfig();
+        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        // 조회 : 호출할 때 마다 객체를 생성
+        MemberService memberService = ac.getBean("memberService", MemberService.class);
+        MemberService memberService2 = ac.getBean("memberService", MemberService.class);
+
+        // 두 인스턴스의 참조값이 같은지 확인
+        System.out.println("memberService = " + memberService);
+        System.out.println("memberService2 = " + memberService2);
+        // memberService = com.springCore.member.MemberServiceImpl@4c2cc639
+        // memberService2 = com.springCore.member.MemberServiceImpl@4c2cc639
+
+        // memberService와 memberService2가 서로 같은지 확인
+        assertThat(memberService).isSameAs(memberService2);
 
     }
 }
