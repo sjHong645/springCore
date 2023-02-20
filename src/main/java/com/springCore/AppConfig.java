@@ -19,11 +19,17 @@ public class AppConfig {
     // @Bean(name ="원하는 이름") 으로 설정할 수 있음
     @Bean
     public MemoryMemberRepository memberRepository() {
+        System.out.println("call AppConfig.memberRepository"); // 이것들을 추가해서
+        // memberRepository가 몇 번 호출되는지 파악해보자
+
+        // 이 코드들을 추가하고 test를 실행해보면...
+        // 각각 1번씩만 출력된다는 걸 알 수 있다. 어떻게 이게 가능한 걸까??
         return new MemoryMemberRepository();
     }
 
     @Bean
     public MemberService memberService() {
+        System.out.println("call AppConfig.memberService");
         return new MemberServiceImpl(memberRepository());
     }
 
@@ -34,6 +40,7 @@ public class AppConfig {
 
     @Bean
     public OrderService orderService() {
+        System.out.println("call AppConfig.orderService");
         return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 
