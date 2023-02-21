@@ -1,33 +1,30 @@
 package com.springCore.order;
 
 import com.springCore.discount.DiscountPolicy;
-import com.springCore.discount.FixDiscountPolicy;
-import com.springCore.discount.RateDiscountPolicy;
 import com.springCore.member.Member;
 import com.springCore.member.MemberRepository;
-import com.springCore.member.MemoryMemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
-    // private final MemberRepository memberRepository = new MemoryMemberRepository();
-    // private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
-    // private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
 
-    // 생성자를 통해서
-    // 원래는 NULL 이었던 memberRepository, discountPolicy를
-    // 외부에서 구현체를 주입할 수 있도록 함
+    // @RequiredArgsConstructor를 붙여줌으로써
+    // final이 붙은 변수에 대해
+    // 아래의 생성자를 자동으로 만들어줌
 
-    // 이제부터 '실행'에만 집중할 수 있게 됨
-    @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+    // 즉, 아래의 코드를 쓰지 않아도 되고 값 설정을 원하는 변수에만 final을 붙여주면 된다.
+    /*public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
-    }
+    }*/
+
+    // 의존관계를 추가하고 싶다면... final 변수만 추가해주면 됨
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
