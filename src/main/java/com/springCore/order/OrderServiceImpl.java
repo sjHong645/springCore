@@ -5,10 +5,11 @@ import com.springCore.member.Member;
 import com.springCore.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
     private final MemberRepository memberRepository;
@@ -19,10 +20,10 @@ public class OrderServiceImpl implements OrderService{
     // 아래의 생성자를 자동으로 만들어줌
 
     // 즉, 아래의 코드를 쓰지 않아도 되고 값 설정을 원하는 변수에만 final을 붙여주면 된다.
-    /*public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+    public OrderServiceImpl(MemberRepository memberRepository, @Qualifier("mainDiscountPolicy") DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
-    }*/
+    }
 
     // 의존관계를 추가하고 싶다면... final 변수만 추가해주면 됨
 
