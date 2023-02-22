@@ -2,9 +2,11 @@ package com.scope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Provider;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -43,25 +45,37 @@ public class SingletonWithPrototypeTest1 {
 
         ClientBean clientBean2 = ac.getBean(ClientBean.class);
         int count2 = clientBean1.logic();
-        assertThat(count2).isEqualTo(2);
+        assertThat(count2).isEqualTo(1);
+
+        // 아래와 같이 각각의 요청에 대해
+        // 서로 다른 프로토타입 빈을 반환한 걸 알 수 있다.
+
+        // PrototypeBean.init com.scope.SingletonWithPrototypeTest1$PrototypeBean@2f62ea70
+        // PrototypeBean.init com.scope.SingletonWithPrototypeTest1$PrototypeBean@2a76840c
 
     }
 
     @Scope("singleton")
     static class ClientBean {
 
+        // 생성자 주입으로 해도 된다.
+        // 여기서는 간단한 테스트를 위해서 필드 주입으로 실행했다.
 
-        private final PrototypeBean prototypeBean;
+        // ObjectProvider를 쓴 경우
+        // @Autowired
+        // private ObjectProvider<PrototypeBean> prototypeBeanObjectProvider;
 
-        // 싱글톤 안에
-        // 프로토타입을 주입한 상황 - 생성시점에 이미 주입됨
-        // 그렇기 때문에 계속해서 같은 객체를 사용한다.
+        // javax.inject.Provider를 쓴 경우
         @Autowired
-        public ClientBean(PrototypeBean prototypeBean) {
-            this.prototypeBean = prototypeBean;
-        }
+        private Provider<PrototypeBean> prototypeBeanObjectProvider;
 
         public int logic() {
+
+            // ObjectProvider를 쓴 경우
+            // PrototypeBean prototypeBean = prototypeBeanObjectProvider.getObject();
+
+            // javax.inject.Provider를 쓴 경우
+            PrototypeBean prototypeBean = prototypeBeanObjectProvider.get();
             prototypeBean.addCount();
             return prototypeBean.getCount();
         }
