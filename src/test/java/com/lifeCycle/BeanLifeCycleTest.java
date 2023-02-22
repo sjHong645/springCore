@@ -24,42 +24,21 @@ public class BeanLifeCycleTest {
         // 기본적인 인터페이스에서는 지원해주지 않는다. 하위까지 내려가야 한다.
         ac.close();
 
+        // 출력 결과
 
-        // 맨 처음에 출력해봤더니 아래와 같은 결과가 나왔다.
         // 생성자 호출, url = null
-        // connect:  null
-        // call: null message = 초기화 연결 메시지
-
-        // 당연한 결과다.
-        // 객체 생성만 이뤄진 상태에서 출력된 결과이기 때문에
-        // 아무런 url로 주입되지 않았다.
-
-        // 인터페이스 설정한 후에
-        /*
-        생성자 호출, url = null - 생성자를 통한 객체 생성
-        NetworkClient.afterPropertiesSet - 의존관계 주입에서 일어날 동작들
-        connect:  http://hello-spring.dev -
-        call: http://hello-spring.dev message = 초기화 연결 메시지
-
-        10:21:24.978 [main] DEBUG org.springframework.context.annotation.AnnotationConfigApplicationContext - Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@49049a04, started on Wed Feb 22 10:21:24 KST 2023
-           ==> closing 호출
-
-        NetworkClient.destroy - 빈이 종료될 때 일어날 동작
-        close:  http://hello-spring.dev
-
-        이후에 스프링이 종료된다.
-         */
-
-
-
-
-
+        // NetworkClient.afterPropertiesSet
+        // connect:  http://hello-spring.dev
+        // call: http://hello-spring.dev message = 초기화 연결 메시지
+        // 10:31:44.569 [main] DEBUG org.springframework.context.annotation.AnnotationConfigApplicationContext - Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@49049a04, started on Wed Feb 22 10:31:43 KST 2023
+        // NetworkClient.destroy
+        // close:  http://hello-spring.dev
     }
 
     @Configuration
     static class LifeCycleConfig {
 
-        @Bean
+        @Bean(initMethod = "init", destroyMethod = "close")
         public NetworkClient networkClient() {
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://hello-spring.dev");
