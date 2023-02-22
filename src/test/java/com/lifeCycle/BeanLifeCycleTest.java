@@ -30,7 +30,7 @@ public class BeanLifeCycleTest {
         // NetworkClient.afterPropertiesSet
         // connect:  http://hello-spring.dev
         // call: http://hello-spring.dev message = 초기화 연결 메시지
-        // 10:31:44.569 [main] DEBUG org.springframework.context.annotation.AnnotationConfigApplicationContext - Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@49049a04, started on Wed Feb 22 10:31:43 KST 2023
+        // 11:10:47.467 [main] DEBUG org.springframework.context.annotation.AnnotationConfigApplicationContext - Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@49049a04, started on Wed Feb 22 11:10:46 KST 2023
         // NetworkClient.destroy
         // close:  http://hello-spring.dev
     }
@@ -38,7 +38,7 @@ public class BeanLifeCycleTest {
     @Configuration
     static class LifeCycleConfig {
 
-        @Bean(initMethod = "init", destroyMethod = "close")
+        @Bean
         public NetworkClient networkClient() {
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://hello-spring.dev");

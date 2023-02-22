@@ -1,5 +1,8 @@
 package com.lifeCycle;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 public class NetworkClient {
 
     private String url;
@@ -33,6 +36,7 @@ public class NetworkClient {
     }
 
     // 의존관계 주입이 끝나면 호출하는 메서드
+    @PostConstruct
     public void init() {
         System.out.println("NetworkClient.afterPropertiesSet");
         connect();
@@ -40,6 +44,7 @@ public class NetworkClient {
     }
 
     // 빈이 종료될 때 호출하는 메서드
+    @PreDestroy
     public void close() {
         System.out.println("NetworkClient.destroy");
         disConnect();
